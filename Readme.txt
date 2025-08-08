@@ -28,6 +28,7 @@ STEPS TO RUN:
 2. Run `extract_features.py`.
 3. Run `train_model.py`.
 4. Run `predict.py` to test a new song.
-
+Run the three .py files under one terminal please.
 Made with basic Python, sklearn, pandas, and librosa.
+
 
