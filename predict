@@ -1,0 +1,33 @@
+import librosa
+import numpy as np
+import joblib
+
+# load the trained model
+model = joblib.load('genre_model.pkl')
+
+# function to get features from song
+def get_song_features(song_path):
+    sound, rate = librosa.load(song_path, duration=30)
+    feats = []
+
+    feats.append(np.mean(librosa.feature.chroma_stft(y=sound, sr=rate)))
+    feats.append(np.mean(librosa.feature.rms(y=sound)))
+    feats.append(np.mean(librosa.feature.spectral_centroid(y=sound, sr=rate)))
+    feats.append(np.mean(librosa.feature.spectral_bandwidth(y=sound, sr=rate)))
+    feats.append(np.mean(librosa.feature.spectral_rolloff(y=sound, sr=rate)))
+    feats.append(np.mean(librosa.feature.zero_crossing_rate(sound)))
+
+    mfccs = librosa.feature.mfcc(y=sound, sr=rate)
+    for coef in mfccs:
+        feats.append(np.mean(coef))
+
+    return np.array(feats).reshape(1, -1)
+
+# change this to the song you want to check
+song_file = "Another Love(test song).mp3"
+
+# get features and predict
+song_features = get_song_features(song_file)
+result = model.predict(song_features)
+
+print("🎧 I think this song is:", result[0])

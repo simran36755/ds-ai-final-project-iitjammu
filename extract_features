@@ -1,0 +1,44 @@
+import os
+import librosa
+import numpy as np
+import pandas as pd
+
+# folder where songs are kept
+my_music_folder = "data"
+
+all_features = []
+genre_names = []
+
+# look inside the main folder
+for each_folder in os.listdir(my_music_folder):
+    full_path = os.path.join(my_music_folder, each_folder)
+
+    if not os.path.isdir(full_path):
+        continue  # skip if not a folder
+
+    # go through every music file inside
+    for music_file in os.listdir(full_path):
+        if music_file.endswith(".mp3") or music_file.endswith(".wav"):
+            full_music_path = os.path.join(full_path, music_file)
+
+            try:
+                sound, sample_rate = librosa.load(full_music_path, duration=30)
+                mfccs = librosa.feature.mfcc(y=sound, sr=sample_rate, n_mfcc=26)
+                avg_features = np.mean(mfccs.T, axis=0)
+
+                all_features.append(avg_features)
+                genre_names.append(each_folder)
+
+                print("Done with:", music_file)
+
+            except:
+                print("Error loading:", music_file)
+
+# put features into a table
+data_table = pd.DataFrame(all_features)
+data_table["label"] = genre_names
+
+# save to csv file
+data_table.to_csv("music_features.csv", index=False)
+
+print("done with all!! ✅")
