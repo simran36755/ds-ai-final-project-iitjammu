@@ -21,6 +21,7 @@ FOLDER STRUCTURE:(used for training model)
    ├── happy/
    └── sad/
 Each folder should have .mp3 or .wav songs before running the code.
+I couldnt upload data folder on git due to restrictions so please make the folder and upload some songs to train the model altho the model needs atleast 5 songs of each genre to train.
 
 STEPS TO RUN:
 1. Put songs into their genre folder inside `data/` for training the model.
@@ -29,3 +30,4 @@ STEPS TO RUN:
 4. Run `predict.py` to test a new song.
 
 Made with basic Python, sklearn, pandas, and librosa.
+
